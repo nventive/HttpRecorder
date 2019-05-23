@@ -18,7 +18,7 @@ Install-Package HttpRecorder
 
 Here is an example of an integration tests using **HttpRecorder** (the `HttpRecorderDelegatingHandler`):
 
-```c#
+```csharp
 using System;
 using System.IO;
 using System.Net;
@@ -92,7 +92,7 @@ By default, matching of the recorded requests is done by comparing the HTTP Meth
 
 If needed, the matching behavior can be customized using the `RulesMatcher`:
 
-```c#
+```csharp
 using HttpRecorder.Matchers;
 
 // Will match requests once in order, without comparing requests.
