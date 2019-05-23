@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.452
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpRecorder", "HttpRecorder\HttpRecorder.csproj", "{ABB84D2D-341F-437B-AD54-DB88A4C5F998}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpRecorder.Tests", "HttpRecorder.Tests\HttpRecorder.Tests.csproj", "{5CEB6088-4ACA-467D-8B76-B79F134D2B5C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B37AA433-2E55-4916-971F-04A80C987AE6}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		GlobalSuppressions.cs = GlobalSuppressions.cs
+		README.md = README.md
+		stylecop.json = stylecop.json
+		TestsSuppressions.cs = TestsSuppressions.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ABB84D2D-341F-437B-AD54-DB88A4C5F998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABB84D2D-341F-437B-AD54-DB88A4C5F998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABB84D2D-341F-437B-AD54-DB88A4C5F998}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{ABB84D2D-341F-437B-AD54-DB88A4C5F998}.Debug|x64.Build.0 = Debug|Any CPU
+		{ABB84D2D-341F-437B-AD54-DB88A4C5F998}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ABB84D2D-341F-437B-AD54-DB88A4C5F998}.Debug|x86.Build.0 = Debug|Any CPU
+		{ABB84D2D-341F-437B-AD54-DB88A4C5F998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABB84D2D-341F-437B-AD54-DB88A4C5F998}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABB84D2D-341F-437B-AD54-DB88A4C5F998}.Release|x64.ActiveCfg = Release|Any CPU
+		{ABB84D2D-341F-437B-AD54-DB88A4C5F998}.Release|x64.Build.0 = Release|Any CPU
+		{ABB84D2D-341F-437B-AD54-DB88A4C5F998}.Release|x86.ActiveCfg = Release|Any CPU
+		{ABB84D2D-341F-437B-AD54-DB88A4C5F998}.Release|x86.Build.0 = Release|Any CPU
+		{5CEB6088-4ACA-467D-8B76-B79F134D2B5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CEB6088-4ACA-467D-8B76-B79F134D2B5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CEB6088-4ACA-467D-8B76-B79F134D2B5C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5CEB6088-4ACA-467D-8B76-B79F134D2B5C}.Debug|x64.Build.0 = Debug|Any CPU
+		{5CEB6088-4ACA-467D-8B76-B79F134D2B5C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5CEB6088-4ACA-467D-8B76-B79F134D2B5C}.Debug|x86.Build.0 = Debug|Any CPU
+		{5CEB6088-4ACA-467D-8B76-B79F134D2B5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CEB6088-4ACA-467D-8B76-B79F134D2B5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CEB6088-4ACA-467D-8B76-B79F134D2B5C}.Release|x64.ActiveCfg = Release|Any CPU
+		{5CEB6088-4ACA-467D-8B76-B79F134D2B5C}.Release|x64.Build.0 = Release|Any CPU
+		{5CEB6088-4ACA-467D-8B76-B79F134D2B5C}.Release|x86.ActiveCfg = Release|Any CPU
+		{5CEB6088-4ACA-467D-8B76-B79F134D2B5C}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8F6A4695-053E-4745-B537-F254465027F1}
+	EndGlobalSection
+EndGlobal
