@@ -1,0 +1,41 @@
+
+pool:
+  vmImage: 'windows-2019'
+
+variables:
+  buildConfiguration: 'Release'
+  artifactsFeedId: '/36e50407-5798-43e2-b0e2-a0de0e3f46c6'
+
+steps:
+- task: GitVersion@4
+  displayName: Git Version
+  inputs:
+    updateAssemblyInfo: false
+
+- script: dotnet build --configuration $(buildConfiguration) -p:Version=$(GitVersion.NuGetVersionV2) -p:FileVersion=$(GitVersion.AssemblySemVer) -p:InformationalVersion=$(GitVersion.InformationalVersion)
+  displayName: Build
+
+- script: dotnet test --no-build --configuration $(buildConfiguration) --logger:trx
+  displayName: Test
+
+- task: PublishTestResults@2
+  displayName: Publish Tests Results
+  inputs:
+    testResultsFormat: 'VSTest'
+    testResultsFiles: '**/*.trx'
+    mergeTestResults: true
+    testRunTitle: 'Unit tests'
+
+- script: dotnet pack --no-build --configuration $(buildConfiguration) -p:Version=$(GitVersion.NuGetVersionV2) --output $(build.artifactStagingDirectory)
+  displayName: Pack
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Build Artifacts'
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(build.artifactStagingDirectory)/**/*.nupkg;!$(build.artifactStagingDirectory)/**/*.snupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '$(artifactsFeedId)'
+  condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq('true', variables['forcePushNuget'])))
