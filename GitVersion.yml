@@ -1,4 +1,6 @@
-mode: Mainline
-branches: {}
+mode: ContinuousDeployment
+branches:
+  master:
+    tag: beta
 ignore:
   sha: []
