@@ -86,6 +86,12 @@ The  `HttpRecorderDelegatingHandler` can be run in different modes:
 
 Just use the appropriate mode in the `HttpRecorderDelegatingHandler`  constructor.
 
+The mode can also be overridden using the environment variable `HTTP_RECORDER_MODE`.
+If this is set to any valid `HttpRecorderMode` value, it will override the mode set in the code,
+except if this mode is `HttpRecorderMode.Passthrough`.
+This is useful when running in a CI environment and you want to make sure that no
+request goes out and all interactions are properly committed to the codebase.
+
 ### Customize the matching behavior
 
 By default, matching of the recorded requests is done by comparing the HTTP Method and complete Request URI. The first request that match is used and will not be returned again in the current run.

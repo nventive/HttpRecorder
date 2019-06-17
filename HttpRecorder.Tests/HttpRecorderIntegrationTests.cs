@@ -299,6 +299,24 @@ namespace HttpRecorder.Tests
             });
         }
 
+        [Fact]
+        public async Task ItShouldOverrideModeWithEnvironmentVariable()
+        {
+            Environment.SetEnvironmentVariable(HttpRecorderDelegatingHandler.OverridingEnvironmentVariableName, HttpRecorderMode.Replay.ToString());
+            try
+            {
+                var client = CreateHttpClient(HttpRecorderMode.Record);
+
+                Func<Task> act = () => client.GetAsync(ApiController.JsonUri);
+
+                act.Should().Throw<HttpRecorderException>();
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable(HttpRecorderDelegatingHandler.OverridingEnvironmentVariableName, string.Empty);
+            }
+        }
+
         private async Task ExecuteModeIterations(Func<HttpClient, HttpRecorderMode, Task> test, [CallerMemberName] string testName = "")
         {
             var iterations = new[]

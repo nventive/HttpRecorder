@@ -16,6 +16,11 @@ namespace HttpRecorder
     /// </summary>
     public class HttpRecorderDelegatingHandler : DelegatingHandler
     {
+        /// <summary>
+        /// Gets the name of the environment variable that allows overriding of the <see cref="Mode"/>.
+        /// </summary>
+        public const string OverridingEnvironmentVariableName = "HTTP_RECORDER_MODE";
+
         private readonly IRequestMatcher _matcher;
         private readonly IInteractionRepository _repository;
 
@@ -138,7 +143,8 @@ namespace HttpRecorder
 
         /// <summary>
         /// Resolves the current <see cref="_executionMode"/>.
-        /// Handles <see cref="HttpRecorderMode.Auto"/>, if this is the case, otherwise uses the current <see cref="Mode"/>.
+        /// Handles <see cref="OverridingEnvironmentVariableName"/> and <see cref="HttpRecorderMode.Auto"/>, if they are set (in that priority order),
+        /// otherwise uses the current <see cref="Mode"/>.
         /// </summary>
         /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
@@ -146,16 +152,23 @@ namespace HttpRecorder
         {
             if (!_executionMode.HasValue)
             {
+                var overridingEnvVarValue = Environment.GetEnvironmentVariable(OverridingEnvironmentVariableName);
+                if (!string.IsNullOrWhiteSpace(overridingEnvVarValue) && Enum.TryParse<HttpRecorderMode>(overridingEnvVarValue, out var parsedOverridingEnvVarValue))
+                {
+                    _executionMode = parsedOverridingEnvVarValue;
+                    return;
+                }
+
                 if (Mode == HttpRecorderMode.Auto)
                 {
                     _executionMode = (await _repository.ExistsAsync(InteractionName, cancellationToken))
                         ? HttpRecorderMode.Replay
                         : HttpRecorderMode.Record;
+
+                    return;
                 }
-                else
-                {
-                    _executionMode = Mode;
-                }
+
+                _executionMode = Mode;
             }
         }
 
