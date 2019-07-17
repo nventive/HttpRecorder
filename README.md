@@ -7,6 +7,8 @@ HttpRecorder is an `HttpMessageHandler` that can record and replay HTTP interact
 Interactions are recorded using the [HTTP Archive format standard](https://en.wikipedia.org/wiki/.har), so that they are easily manipulated by your favorite tool of choice.
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Build Status](https://dev.azure.com/nventive-public/nventive/_apis/build/status/nventive.HttpRecorder?branchName=master)](https://dev.azure.com/nventive-public/nventive/_build/latest?definitionId=3&branchName=master)
+![Nuget](https://img.shields.io/nuget/v/HttpRecorder.svg)
 
 ## Getting Started
 

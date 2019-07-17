@@ -4,7 +4,6 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  artifactsFeedId: '/36e50407-5798-43e2-b0e2-a0de0e3f46c6'
 
 steps:
 - task: GitVersion@4
@@ -32,10 +31,16 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Build Artifacts'
 
+- task: NuGetToolInstaller@1
+  condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq('true', variables['forcePushNuget'])))
+  inputs:
+    versionSpec: '>= 4.9'
+    checkLatest: true
+
 - task: NuGetCommand@2
+  condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq('true', variables['forcePushNuget'])))
   inputs:
     command: 'push'
     packagesToPush: '$(build.artifactStagingDirectory)/**/*.nupkg;!$(build.artifactStagingDirectory)/**/*.snupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: '$(artifactsFeedId)'
-  condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq('true', variables['forcePushNuget'])))
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'nventive'
