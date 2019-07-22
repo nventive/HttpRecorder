@@ -36,6 +36,11 @@ namespace HttpRecorder.Matchers
         /// <inheritdoc />
         public InteractionMessage Match(HttpRequestMessage request, Interaction interaction)
         {
+            if (interaction == null)
+            {
+                throw new ArgumentNullException(nameof(interaction));
+            }
+
             IEnumerable<InteractionMessage> query = interaction.Messages;
 
             if (_matchOnce)

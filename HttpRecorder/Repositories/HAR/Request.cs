@@ -24,6 +24,11 @@ namespace HttpRecorder.Repositories.HAR
         /// <param name="request">The <see cref="HttpRequestMessage"/> to initialize from.</param>
         public Request(HttpRequestMessage request)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             HttpVersion = $"{HTTPVERSIONPREFIX}{request.Version}";
             Method = request.Method.ToString();
             Url = request.RequestUri;

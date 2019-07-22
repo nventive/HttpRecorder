@@ -21,6 +21,11 @@ namespace HttpRecorder.Repositories.HAR
         /// <param name="interaction">The <see cref="Interaction"/> to use to initialize.</param>
         public HttpArchive(Interaction interaction)
         {
+            if (interaction == null)
+            {
+                throw new ArgumentNullException(nameof(interaction));
+            }
+
             foreach (var message in interaction.Messages)
             {
                 Log.Entries.Add(new Entry(message));

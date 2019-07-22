@@ -21,6 +21,11 @@ namespace HttpRecorder.Repositories.HAR
         /// <param name="message">The <see cref="InteractionMessage"/> to initialize from.</param>
         public Entry(InteractionMessage message)
         {
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
             StartedDateTime = message.Timings.StartedDateTime;
             Time = Convert.ToInt64(Math.Round(message.Timings.Time.TotalMilliseconds, 0));
             Request = new Request(message.Response.RequestMessage);

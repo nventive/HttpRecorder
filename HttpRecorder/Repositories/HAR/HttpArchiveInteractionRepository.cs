@@ -51,6 +51,11 @@ namespace HttpRecorder.Repositories.HAR
         /// <inheritdoc />
         public Task StoreAsync(Interaction interaction, CancellationToken cancellationToken = default)
         {
+            if (interaction == null)
+            {
+                throw new ArgumentNullException(nameof(interaction));
+            }
+
             try
             {
                 var archive = new HttpArchive(interaction);

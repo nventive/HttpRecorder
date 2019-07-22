@@ -24,6 +24,11 @@ namespace HttpRecorder.Repositories.HAR
         /// <param name="response">The <see cref="HttpResponseMessage"/> to initialize from.</param>
         public Response(HttpResponseMessage response)
         {
+            if (response == null)
+            {
+                throw new ArgumentNullException(nameof(response));
+            }
+
             HttpVersion = $"{HTTPVERSIONPREFIX}{response.Version}";
             Status = (int)response.StatusCode;
             StatusText = response.ReasonPhrase;

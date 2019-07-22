@@ -91,6 +91,11 @@ namespace HttpRecorder
         /// <inheritdoc />
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             if (Mode == HttpRecorderMode.Passthrough)
             {
                 var response = await base.SendAsync(request, cancellationToken);
