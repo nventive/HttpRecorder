@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using HttpRecorder.Anonymizers;
 using HttpRecorder.Repositories;
 using HttpRecorder.Tests.Server;
 using Moq;
@@ -317,6 +318,23 @@ namespace HttpRecorder.Tests
             }
         }
 
+        [Fact]
+        public async Task ItShouldAnonymize()
+        {
+            var repositoryMock = new Mock<IInteractionRepository>();
+            var client = CreateHttpClient(
+                HttpRecorderMode.Record,
+                repository: repositoryMock.Object,
+                anonymizer: RulesInteractionAnonymizer.Default.AnonymizeRequestQueryStringParameter("key"));
+            Func<Task> act = async () => await client.GetAsync($"{ApiController.JsonUri}?key=foo");
+            act.Should().Throw<InvalidOperationException>(); // Because we don't act on the stream in the repository. That's fine.
+
+            repositoryMock.Verify(
+                x => x.StoreAsync(
+                    It.Is<Interaction>(i => i.Messages[0].Response.RequestMessage.RequestUri.ToString().EndsWith($"{ApiController.JsonUri}?key={RulesInteractionAnonymizer.DefaultAnonymizerReplaceValue}", StringComparison.Ordinal)),
+                    It.IsAny<CancellationToken>()));
+        }
+
         private async Task ExecuteModeIterations(Func<HttpClient, HttpRecorderMode, Task> test, [CallerMemberName] string testName = "")
         {
             var iterations = new[]
@@ -336,8 +354,9 @@ namespace HttpRecorder.Tests
         private HttpClient CreateHttpClient(
             HttpRecorderMode mode,
             [CallerMemberName] string testName = "",
-            IInteractionRepository repository = null)
-            => new HttpClient(new HttpRecorderDelegatingHandler(testName, mode: mode, repository: repository))
+            IInteractionRepository repository = null,
+            IInteractionAnonymizer anonymizer = null)
+            => new HttpClient(new HttpRecorderDelegatingHandler(testName, mode: mode, repository: repository, anonymizer: anonymizer))
             {
                 BaseAddress = _fixture.ServerUri,
             };

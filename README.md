@@ -125,6 +125,26 @@ var client = new HttpClient(new HttpRecorderDelegatingHandler("...", matcher: ma
 
 Additional customization can be done by providing a custom `IRequestMatcher` implementation.
 
+### Anonymize the records
+
+Sometimes, there are portions of the requests / responses that you don't want recorded
+(e.g. because of API keys you do not want to commit to the source code repo...).
+
+In this case, you can use the `RulesInteractionAnonymizer` to perform the substitution.
+
+```csharp
+using HttpRecorder.Anonymizers;
+
+var anonymizer = RulesInteractionAnonymizer.Default
+    .AnonymizeRequestQueryStringParameter("queryStringParam")
+    .AnonymizeRequestHeader("requestHeader");
+
+var client = new HttpClient(new HttpRecorderDelegatingHandler("...", anonymizer: anonymizer));
+```
+
+Additional customization can be done by providing a custom `IInteractionAnonymizer`
+implementation.
+
 ### Record interaction in external tools
 
 Interaction files can be recorded using your favorite tool (e.g. [Fiddler](https://www.telerik.com/fiddler), Google Chrome Inspector, ...).

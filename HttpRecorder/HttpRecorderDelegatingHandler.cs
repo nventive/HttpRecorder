@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using HttpRecorder.Anonymizers;
 using HttpRecorder.Matchers;
 using HttpRecorder.Repositories;
 using HttpRecorder.Repositories.HAR;
@@ -23,7 +24,7 @@ namespace HttpRecorder
 
         private readonly IRequestMatcher _matcher;
         private readonly IInteractionRepository _repository;
-
+        private readonly IInteractionAnonymizer _anonymizer;
         private readonly SemaphoreSlim _interactionLock = new SemaphoreSlim(1, 1);
         private bool _disposed = false;
         private HttpRecorderMode? _executionMode;
@@ -48,18 +49,24 @@ namespace HttpRecorder
         /// The <see cref="IInteractionRepository"/> to use to read/write the interaction.
         /// Defaults to <see cref="HttpArchiveInteractionRepository"/>.
         /// </param>
+        /// <param name="anonymizer">
+        /// The <see cref="IInteractionAnonymizer"/> to use to anonymize the interaction.
+        /// Defaults to <see cref="RulesInteractionAnonymizer.Default"/>.
+        /// </param>
         public HttpRecorderDelegatingHandler(
             string interactionName,
             HttpRecorderMode mode = HttpRecorderMode.Auto,
             HttpMessageHandler innerHandler = null,
             IRequestMatcher matcher = null,
-            IInteractionRepository repository = null)
+            IInteractionRepository repository = null,
+            IInteractionAnonymizer anonymizer = null)
             : base(innerHandler ?? new HttpClientHandler())
         {
             InteractionName = interactionName;
             Mode = mode;
             _matcher = matcher ?? RulesMatcher.MatchOnce.ByHttpMethod().ByRequestUri();
             _repository = repository ?? new HttpArchiveInteractionRepository();
+            _anonymizer = anonymizer ?? RulesInteractionAnonymizer.Default;
         }
 
         /// <summary>
@@ -136,6 +143,7 @@ namespace HttpRecorder
                     InteractionName,
                     _interaction == null ? new[] { newInteractionMessage } : _interaction.Messages.Append(newInteractionMessage));
 
+                _interaction = await _anonymizer.Anonymize(_interaction, cancellationToken);
                 await _repository.StoreAsync(_interaction, cancellationToken);
 
                 return await PostProcessResponse(newInteractionMessage.Response);
