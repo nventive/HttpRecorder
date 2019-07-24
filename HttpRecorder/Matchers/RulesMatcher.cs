@@ -19,7 +19,7 @@ namespace HttpRecorder.Matchers
 
         private RulesMatcher(IEnumerable<Func<HttpRequestMessage, InteractionMessage, bool>> rules = null, bool matchOnce = true)
         {
-            _rules = rules ?? new List<Func<HttpRequestMessage, InteractionMessage, bool>>();
+            _rules = rules ?? Enumerable.Empty<Func<HttpRequestMessage, InteractionMessage, bool>>();
             _matchOnce = matchOnce;
         }
 
