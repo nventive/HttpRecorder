@@ -36,5 +36,33 @@ namespace HttpRecorder.Tests
             var response = await client.GetAsync(ApiController.JsonUri);
             response.EnsureSuccessStatusCode();
         }
+
+        [Fact]
+        public async Task ItShouldWorkWithComplexInteractionsInvolvingDisposedContent()
+        {
+            var services = new ServiceCollection();
+            services
+                .AddHttpClient(
+                    "TheClient",
+                    options =>
+                    {
+                        options.BaseAddress = _fixture.ServerUri;
+                    })
+                .AddHttpRecorder(nameof(ItShouldWorkWithHttpClientFactory), HttpRecorderMode.Record);
+
+            var client = services.BuildServiceProvider().GetRequiredService<IHttpClientFactory>().CreateClient("TheClient");
+
+            var formContent = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("name", "TheName"),
+                });
+
+            var response = await client.PostAsync(ApiController.FormDataUri, formContent);
+            response.EnsureSuccessStatusCode();
+            response.Dispose();
+
+            response = await client.PostAsync(ApiController.FormDataUri, formContent);
+            response.EnsureSuccessStatusCode();
+        }
     }
 }

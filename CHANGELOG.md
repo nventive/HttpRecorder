@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- `ObjectDisposedException` that can happen on complex interactions involving multiple requests/responses that are being disposed.
+
 ### Security
 
 ## 1.1.0
