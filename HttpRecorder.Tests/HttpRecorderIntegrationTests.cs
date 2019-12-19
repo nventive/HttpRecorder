@@ -356,7 +356,11 @@ namespace HttpRecorder.Tests
             [CallerMemberName] string testName = "",
             IInteractionRepository repository = null,
             IInteractionAnonymizer anonymizer = null)
-            => new HttpClient(new HttpRecorderDelegatingHandler(testName, mode: mode, repository: repository, anonymizer: anonymizer))
+            => new HttpClient(
+                new HttpRecorderDelegatingHandler(testName, mode: mode, repository: repository, anonymizer: anonymizer)
+                {
+                    InnerHandler = new HttpClientHandler(),
+                })
             {
                 BaseAddress = _fixture.ServerUri,
             };

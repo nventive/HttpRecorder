@@ -39,7 +39,6 @@ namespace HttpRecorder
         /// if no file extension is provided, .har will be used.
         /// </param>
         /// <param name="mode">The <see cref="HttpRecorderMode" />. Defaults to <see cref="HttpRecorderMode.Auto" />.</param>
-        /// <param name="innerHandler">The inner <see cref="HttpMessageHandler" /> to configure. If not provided, <see cref="HttpClientHandler" /> will be used.</param>
         /// <param name="matcher">
         /// The <see cref="IRequestMatcher"/> to use to match interactions with incoming <see cref="HttpRequestMessage"/>.
         /// Defaults to matching Once by <see cref="HttpMethod"/> and <see cref="HttpRequestMessage.RequestUri"/>.
@@ -56,11 +55,9 @@ namespace HttpRecorder
         public HttpRecorderDelegatingHandler(
             string interactionName,
             HttpRecorderMode mode = HttpRecorderMode.Auto,
-            HttpMessageHandler innerHandler = null,
             IRequestMatcher matcher = null,
             IInteractionRepository repository = null,
             IInteractionAnonymizer anonymizer = null)
-            : base(innerHandler ?? new HttpClientHandler())
         {
             InteractionName = interactionName;
             Mode = mode;
