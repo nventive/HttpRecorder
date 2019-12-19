@@ -30,7 +30,7 @@ namespace HttpRecorder.Repositories
         /// </summary>
         /// <param name="interaction">The <see cref="Interaction"/> to store.</param>
         /// <param name="cancellationToken">A cancellation token to cancel operation.</param>
-        /// <returns>The <see cref="Task"/>.</returns>
-        Task StoreAsync(Interaction interaction, CancellationToken cancellationToken);
+        /// <returns>The persisted <see cref="Interaction"/>.</returns>
+        Task<Interaction> StoreAsync(Interaction interaction, CancellationToken cancellationToken);
     }
 }

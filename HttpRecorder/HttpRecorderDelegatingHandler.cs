@@ -141,7 +141,7 @@ namespace HttpRecorder
                     _interaction == null ? new[] { newInteractionMessage } : _interaction.Messages.Append(newInteractionMessage));
 
                 _interaction = await _anonymizer.Anonymize(_interaction, cancellationToken);
-                await _repository.StoreAsync(_interaction, cancellationToken);
+                _interaction = await _repository.StoreAsync(_interaction, cancellationToken);
 
                 return await PostProcessResponse(newInteractionMessage.Response);
             }

@@ -49,7 +49,7 @@ namespace HttpRecorder.Repositories.HAR
         }
 
         /// <inheritdoc />
-        public Task StoreAsync(Interaction interaction, CancellationToken cancellationToken = default)
+        public Task<Interaction> StoreAsync(Interaction interaction, CancellationToken cancellationToken = default)
         {
             if (interaction == null)
             {
@@ -67,7 +67,7 @@ namespace HttpRecorder.Repositories.HAR
 
                 File.WriteAllText(GetFilePath(interaction.Name), JsonConvert.SerializeObject(archive, Formatting.Indented, _jsonSettings));
 
-                return Task.CompletedTask;
+                return Task.FromResult(archive.ToInteraction(interaction.Name));
             }
             catch (Exception ex) when ((ex is IOException) || (ex is JsonException))
             {
