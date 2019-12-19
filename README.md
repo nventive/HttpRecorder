@@ -66,7 +66,9 @@ namespace Sample
 
             // Initialize the HttpClient with HttpRecorderDelegatingHandler, which
             // records and replays the interactions.
-            return new HttpClient(new HttpRecorderDelegatingHandler(interactionFilePath))
+            // Do not forget to set the InnerHandler property.
+            return new HttpClient(
+                new HttpRecorderDelegatingHandler(interactionFilePath) { InnerHandler = new HttpClientHandler() })
             {
                 BaseAddress = new Uri("https://reqres.in/"),
             };
