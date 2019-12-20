@@ -126,9 +126,32 @@ namespace HttpRecorder.Matchers
         /// </summary>
         /// <returns>A new <see cref="RulesMatcher"/>.</returns>
         public RulesMatcher ByContent()
-            => By((request, message) => StructuralComparisons.StructuralComparer.Compare(
-                    request.Content?.ReadAsByteArrayAsync()?.Result,
-                    message.Response.RequestMessage.Content?.ReadAsByteArrayAsync()?.Result) == 0);
+            => By((request, message) =>
+            {
+                var requestContent = request.Content?.ReadAsByteArrayAsync()?.ConfigureAwait(false).GetAwaiter().GetResult();
+                var messageContent = message.Response.RequestMessage.Content?.ReadAsByteArrayAsync()?.ConfigureAwait(false).GetAwaiter().GetResult();
+
+                if (requestContent is null)
+                {
+                    return messageContent is null;
+                }
+                else
+                {
+                    if (messageContent is null)
+                    {
+                        return false;
+                    }
+                }
+
+                if (requestContent.Length != messageContent.Length)
+                {
+                    return false;
+                }
+
+                return StructuralComparisons.StructuralComparer.Compare(
+                      request.Content?.ReadAsByteArrayAsync()?.Result,
+                      message.Response.RequestMessage.Content?.ReadAsByteArrayAsync()?.Result) == 0;
+            });
 
         /// <summary>
         /// Adds a rule that matches by comparing the JSON content of the requests.

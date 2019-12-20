@@ -106,9 +106,29 @@ namespace HttpRecorder.Tests.Matchers
         }
 
         [Fact]
-        public void ItShouldMatchOnceByContent()
+        public void ItShouldMatchOnceByContentWithSameSize()
         {
             var firstContent = new ByteArrayContent(new byte[] { 0, 1, 2, 3 });
+            var secondContent = new ByteArrayContent(new byte[] { 3, 2, 1, 0 });
+            var interaction = BuildInteraction(
+                new HttpRequestMessage(),
+                new HttpRequestMessage { Content = firstContent },
+                new HttpRequestMessage { Content = secondContent });
+            var request = new HttpRequestMessage { Content = secondContent };
+
+            var matcher = RulesMatcher.MatchOnce
+                .ByContent();
+
+            var result = matcher.Match(request, interaction);
+
+            result.Should().NotBeNull();
+            result.Response.RequestMessage.Content.Should().BeEquivalentTo(secondContent);
+        }
+
+        [Fact]
+        public void ItShouldMatchOnceByContentWithDifferentSizes()
+        {
+            var firstContent = new ByteArrayContent(new byte[] { 0, 1 });
             var secondContent = new ByteArrayContent(new byte[] { 3, 2, 1, 0 });
             var interaction = BuildInteraction(
                 new HttpRequestMessage(),
