@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - `ObjectDisposedException` that can happen on complex interactions involving multiple requests/responses that are being disposed.
+- `ArgumentException`: *Object is not a array with the same number of elements as the array to compare it* to when comparing requests by content with different body sizes.
 
 ### Security
 
