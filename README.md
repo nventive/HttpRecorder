@@ -147,6 +147,65 @@ var client = new HttpClient(new HttpRecorderDelegatingHandler("...", anonymizer:
 Additional customization can be done by providing a custom `IInteractionAnonymizer`
 implementation.
 
+### HttpClientFactory
+
+The component comes with extension methods for the HttpClientFactory:
+
+```csharp
+services
+    .AddHttpClient("TheClient")
+    .AddHttpRecorder(interactionName);
+```
+
+### Recorder Context
+
+It is sometime helpful to be able to decoralate the injection of the `HttpRecorderDelegatingHandler`
+and the Test case setup.
+
+This is especially useful in the context of ASP.NET Core Integration tests.
+
+It is possible to add the `HttpRecorderDelegatingHandler` globally to all `HttpClient` managed by the `IHttpClientFactory`,
+and then to customize the recording in the test case by using the `HttpRecorderContext`.
+
+Here is how to do it:
+
+```csharp
+// When registering the services, do the following:
+services.AddHttpRecorderContextSupport();
+// This can be done in the ConfigureWebHost method of the WebApplicationFactory for example.
+// It will inject the HttpRecorderDelegatingHandler in all HttpClients.
+
+// Then, write your test cases using the following pattern:
+[Fact]
+public async Task ItShould()
+{
+    using var context = new HttpRecorderContext(); // Notice the using pattern here.
+    // .. Perform test case. Interactions are recorded and replay as expected :-)
+}
+
+// Additional configuration per HttpClient can be setup as well:
+[Fact]
+public async Task ItShould()
+{
+    using var context = new HttpRecorderContext((sp, builder) =>
+        {
+            return builder.Name switch // The builder name here is the name of the HttpClient.
+            {
+                nameof(TypedClient) => new HttpRecorderConfiguration
+                {
+                    Matcher = RulesMatcher.MatchMultiple,
+                },
+                nameof(DisabledClient) => new HttpRecorderConfiguration
+                {
+                    Enabled = false,
+                },
+                _ => null // Default configuration.
+            };
+        });
+    // .. Perform test case.
+}
+```
+
 ### Record interaction in external tools
 
 Interaction files can be recorded using your favorite tool (e.g. [Fiddler](https://www.telerik.com/fiddler), Google Chrome Inspector, ...).

@@ -6,6 +6,7 @@
 [assembly: SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1005:Single line comments must begin with single space", Justification = "Prevents quick edits during development")]
 [assembly: SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1515:Single-line comment must be preceded by blank line", Justification = "Prevents quick edits during development")]
 
+[assembly: SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "Localization is not in scope.")]
 [assembly: SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "HttpClient has some questionable Dispose patterns.")]
 [assembly: SuppressMessage("Reliability", "CA2007:Do not directly await a Task", Justification = "Not needed systematically.")]
 [assembly: SuppressMessage("Usage", "CA2234:Pass system uri objects instead of strings", Justification = "String is fine - Uri class is sometime cumbersome.")]
