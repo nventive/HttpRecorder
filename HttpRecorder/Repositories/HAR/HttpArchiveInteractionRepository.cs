@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace HttpRecorder.Repositories.HAR
 {
@@ -18,11 +17,12 @@ namespace HttpRecorder.Repositories.HAR
     /// </remarks>
     public class HttpArchiveInteractionRepository : IInteractionRepository
     {
-        private static readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+        private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
         {
-            ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            NullValueHandling = NullValueHandling.Ignore,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            PropertyNameCaseInsensitive = true,
+            IgnoreNullValues = true,
+            WriteIndented = true,
         };
 
         /// <inheritdoc />
@@ -36,9 +36,9 @@ namespace HttpRecorder.Repositories.HAR
         {
             try
             {
-                var archive = JsonConvert.DeserializeObject<HttpArchive>(
+                var archive = JsonSerializer.Deserialize<HttpArchive>(
                 File.ReadAllText(GetFilePath(interactionName), Encoding.UTF8),
-                _jsonSettings);
+                _jsonOptions);
 
                 return Task.FromResult(archive.ToInteraction(interactionName));
             }
@@ -65,7 +65,7 @@ namespace HttpRecorder.Repositories.HAR
                     Directory.CreateDirectory(archiveDirectory);
                 }
 
-                File.WriteAllText(GetFilePath(interaction.Name), JsonConvert.SerializeObject(archive, Formatting.Indented, _jsonSettings));
+                File.WriteAllText(GetFilePath(interaction.Name), JsonSerializer.Serialize(archive, _jsonOptions));
 
                 return Task.FromResult(archive.ToInteraction(interaction.Name));
             }

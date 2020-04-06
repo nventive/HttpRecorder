@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace HttpRecorder.Matchers
 {
@@ -158,18 +158,18 @@ namespace HttpRecorder.Matchers
         /// </summary>
         /// <typeparam name="T">The json object type.</typeparam>
         /// <param name="equalityComparer"><see cref="IEqualityComparer{T}"/> to use. Defaults to <see cref="EqualityComparer{T}.Default"/>.</param>
-        /// <param name="jsonSerializerSettings">The <see cref="JsonSerializerSettings"/> to use.</param>
+        /// <param name="jsonSerializerOptions">The <see cref="JsonSerializerOptions"/> to use.</param>
         /// <returns>A new <see cref="RulesMatcher"/>.</returns>
         public RulesMatcher ByJsonContent<T>(
             IEqualityComparer<T> equalityComparer = null,
-            JsonSerializerSettings jsonSerializerSettings = null)
+            JsonSerializerOptions jsonSerializerOptions = null)
             => By((request, message) =>
             {
                 var requestContent = request.Content?.ReadAsStringAsync()?.Result;
-                var requestJson = !string.IsNullOrEmpty(requestContent) ? JsonConvert.DeserializeObject<T>(requestContent, jsonSerializerSettings) : default(T);
+                var requestJson = !string.IsNullOrEmpty(requestContent) ? JsonSerializer.Deserialize<T>(requestContent, jsonSerializerOptions) : default(T);
 
                 var interactionContent = message.Response.RequestMessage.Content?.ReadAsStringAsync()?.Result;
-                var interactionJson = !string.IsNullOrEmpty(interactionContent) ? JsonConvert.DeserializeObject<T>(interactionContent, jsonSerializerSettings) : default(T);
+                var interactionJson = !string.IsNullOrEmpty(interactionContent) ? JsonSerializer.Deserialize<T>(interactionContent, jsonSerializerOptions) : default(T);
 
                 if (equalityComparer == null)
                 {

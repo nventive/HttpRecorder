@@ -20,14 +20,14 @@ namespace HttpRecorder.Repositories.HAR
         public string HttpVersion { get; set; }
 
         /// <summary>
-        /// Gets the list of cookie objects. NOT SUPPORTED.
+        /// Gets or sets the list of cookie objects. NOT SUPPORTED.
         /// </summary>
-        public IList<object> Cookies { get; private set; } = new List<object>();
+        public List<object> Cookies { get; set; } = new List<object>();
 
         /// <summary>
-        /// Gets the list of <see cref="Header"/>.
+        /// Gets or sets the list of <see cref="Header"/>.
         /// </summary>
-        public IList<Header> Headers { get; private set; } = new List<Header>();
+        public List<Header> Headers { get; set; } = new List<Header>();
 
         /// <summary>
         /// Gets or sets the total number of bytes from the start of the HTTP request message until (and including) the double CRLF before the body.
