@@ -69,9 +69,9 @@ namespace HttpRecorder.Repositories.HAR
         public Uri Url { get; set; }
 
         /// <summary>
-        /// Gets the list of <see cref="QueryParameter"/> parameters.
+        /// Gets or sets the list of <see cref="QueryParameter"/> parameters.
         /// </summary>
-        public IList<QueryParameter> QueryString { get; private set; } = new List<QueryParameter>();
+        public List<QueryParameter> QueryString { get; set; } = new List<QueryParameter>();
 
         /// <summary>
         /// Gets or sets the <see cref="PostData"/>.

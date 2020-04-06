@@ -49,9 +49,9 @@ namespace HttpRecorder.Repositories.HAR
         public string MimeType { get; set; }
 
         /// <summary>
-        /// Gets the list of <see cref="PostedParam"/>.
+        /// Gets or sets the list of <see cref="PostedParam"/>.
         /// </summary>
-        public IList<PostedParam> Params { get; private set; } = new List<PostedParam>();
+        public List<PostedParam> Params { get; set; } = new List<PostedParam>();
 
         /// <summary>
         /// Gets or sets plain text posted data.

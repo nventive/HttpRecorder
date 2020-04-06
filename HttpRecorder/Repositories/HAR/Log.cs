@@ -19,8 +19,8 @@ namespace HttpRecorder.Repositories.HAR
         public Creator Creator { get; set; } = new Creator();
 
         /// <summary>
-        /// Gets the list of <see cref="Entry"/>.
+        /// Gets or sets the list of <see cref="Entry"/>.
         /// </summary>
-        public IList<Entry> Entries { get; private set; } = new List<Entry>();
+        public List<Entry> Entries { get; set; } = new List<Entry>();
     }
 }

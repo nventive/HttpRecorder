@@ -9,4 +9,5 @@
 [assembly: SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "Localization is not in scope.")]
 [assembly: SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "HttpClient has some questionable Dispose patterns.")]
 [assembly: SuppressMessage("Reliability", "CA2007:Do not directly await a Task", Justification = "Not needed systematically.")]
+[assembly: SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Conflicts with Serialization.")]
 [assembly: SuppressMessage("Usage", "CA2234:Pass system uri objects instead of strings", Justification = "String is fine - Uri class is sometime cumbersome.")]
