@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,12 +9,12 @@ namespace HttpRecorder.Tests.Server
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddControllers();
         }
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseMvc();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

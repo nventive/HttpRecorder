@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace HttpRecorder.Repositories.HAR
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = true,
-            IgnoreNullValues = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             WriteIndented = true,
         };
 

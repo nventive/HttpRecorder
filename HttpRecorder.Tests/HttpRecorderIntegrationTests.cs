@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -239,7 +240,7 @@ namespace HttpRecorder.Tests
 
             Func<Task> act = async () => await client.GetAsync(ApiController.JsonUri);
 
-            act.Should().Throw<HttpRecorderException>()
+            await act.Should().ThrowAsync<HttpRecorderException>()
                 .WithMessage($"*{TestFile}*");
         }
 
@@ -251,7 +252,7 @@ namespace HttpRecorder.Tests
 
             Func<Task> act = async () => await client.GetAsync(ApiController.JsonUri);
 
-            act.Should().Throw<HttpRecorderException>()
+            await act.Should().ThrowAsync<HttpRecorderException>()
                 .WithMessage($"*{file}*");
         }
 
@@ -268,7 +269,7 @@ namespace HttpRecorder.Tests
 
             Func<Task> act = async () => await client.GetAsync(ApiController.JsonUri);
 
-            act.Should().Throw<HttpRecorderException>()
+            await act.Should().ThrowAsync<HttpRecorderException>()
                 .WithMessage($"*{ApiController.JsonUri}*");
         }
 
@@ -286,7 +287,7 @@ namespace HttpRecorder.Tests
             await ExecuteModeIterations(async (client, mode) =>
             {
                 var response = await client.GetAsync($"{ApiController.StatusCodeUri}?statusCode={statusCode}");
-                response.StatusCode.Should().Be(statusCode);
+                response.StatusCode.Should().Be((HttpStatusCode)statusCode);
                 response.Headers.Remove("Date");
 
                 if (mode == HttpRecorderMode.Passthrough)
@@ -310,7 +311,7 @@ namespace HttpRecorder.Tests
 
                 Func<Task> act = () => client.GetAsync(ApiController.JsonUri);
 
-                act.Should().Throw<HttpRecorderException>();
+                await act.Should().ThrowAsync<HttpRecorderException>();
             }
             finally
             {
@@ -327,7 +328,7 @@ namespace HttpRecorder.Tests
                 repository: repositoryMock.Object,
                 anonymizer: RulesInteractionAnonymizer.Default.AnonymizeRequestQueryStringParameter("key"));
             Func<Task> act = async () => await client.GetAsync($"{ApiController.JsonUri}?key=foo");
-            act.Should().Throw<InvalidOperationException>(); // Because we don't act on the stream in the repository. That's fine.
+            await act.Should().ThrowAsync<InvalidOperationException>(); // Because we don't act on the stream in the repository. That's fine.
 
             repositoryMock.Verify(
                 x => x.StoreAsync(
