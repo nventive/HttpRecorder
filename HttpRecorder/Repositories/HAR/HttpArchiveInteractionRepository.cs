@@ -49,29 +49,33 @@ namespace HttpRecorder.Repositories.HAR
         }
 
         /// <inheritdoc />
-        public Task<Interaction> StoreAsync(Interaction interaction, CancellationToken cancellationToken = default)
+        public async Task<Interaction> StoreAsync(Interaction interaction, CancellationToken cancellationToken = default)
         {
             if (interaction == null)
             {
                 throw new ArgumentNullException(nameof(interaction));
             }
 
+            var filePath = GetFilePath(interaction.Name);
             try
             {
                 var archive = new HttpArchive(interaction);
-                var archiveDirectory = Path.GetDirectoryName(GetFilePath(interaction.Name));
+                var archiveDirectory = Path.GetDirectoryName(filePath);
                 if (!string.IsNullOrWhiteSpace(archiveDirectory) && !Directory.Exists(archiveDirectory))
                 {
                     Directory.CreateDirectory(archiveDirectory);
                 }
 
-                File.WriteAllText(GetFilePath(interaction.Name), JsonSerializer.Serialize(archive, _jsonOptions));
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await JsonSerializer.SerializeAsync(stream, archive, _jsonOptions, cancellationToken);
+                }
 
-                return Task.FromResult(archive.ToInteraction(interaction.Name));
+                return archive.ToInteraction(interaction.Name);
             }
             catch (Exception ex) when ((ex is IOException) || (ex is JsonException))
             {
-                throw new HttpRecorderException($"Error while writing file {GetFilePath(interaction.Name)}: {ex.Message}", ex);
+                throw new HttpRecorderException($"Error while writing file {filePath}: {ex.Message}", ex);
             }
         }
 
