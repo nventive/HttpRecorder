@@ -6,7 +6,7 @@
     <Copyright>Copyright (c) 2020, nventive</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Product>HttpRecorder</Product>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>10.0</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <NoWarn>1701;1702;1998</NoWarn>

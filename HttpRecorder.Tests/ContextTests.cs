@@ -32,8 +32,8 @@ namespace HttpRecorder.Tests
                         options.BaseAddress = _fixture.ServerUri;
                     });
 
-            HttpResponseMessage passthroughResponse = null;
-            using (var context = new HttpRecorderContext((sp, builder) => new HttpRecorderConfiguration
+            HttpResponseMessage passthroughResponse;
+            using (new HttpRecorderContext((_, _) => new HttpRecorderConfiguration
             {
                 Mode = HttpRecorderMode.Record,
                 InteractionName = nameof(ItShouldWorkWithHttpRecorderContext),
@@ -44,7 +44,7 @@ namespace HttpRecorder.Tests
                 passthroughResponse.EnsureSuccessStatusCode();
             }
 
-            using (var context = new HttpRecorderContext((sp, builder) => new HttpRecorderConfiguration
+            using (new HttpRecorderContext((_, _) => new HttpRecorderConfiguration
             {
                 Mode = HttpRecorderMode.Replay,
                 InteractionName = nameof(ItShouldWorkWithHttpRecorderContext),
@@ -70,8 +70,8 @@ namespace HttpRecorder.Tests
                         options.BaseAddress = _fixture.ServerUri;
                     });
 
-            HttpResponseMessage passthroughResponse = null;
-            using (var context = new HttpRecorderContext((sp, builder) => new HttpRecorderConfiguration
+            HttpResponseMessage passthroughResponse;
+            using (new HttpRecorderContext((_, _) => new HttpRecorderConfiguration
             {
                 Enabled = false,
                 Mode = HttpRecorderMode.Record,
@@ -83,7 +83,7 @@ namespace HttpRecorder.Tests
                 passthroughResponse.EnsureSuccessStatusCode();
             }
 
-            using (var context = new HttpRecorderContext((sp, builder) => new HttpRecorderConfiguration
+            using (new HttpRecorderContext((_, _) => new HttpRecorderConfiguration
             {
                 Mode = HttpRecorderMode.Replay,
                 InteractionName = nameof(ItShouldWorkWithHttpRecorderContextWhenNotRecording),
@@ -99,7 +99,7 @@ namespace HttpRecorder.Tests
         public void ItShouldNotAllowMultipleContexts()
         {
             using var context = new HttpRecorderContext();
-            Action act = () => { var ctx2 = new HttpRecorderContext(); };
+            Action act = () => { _ = new HttpRecorderContext(); };
             act.Should().Throw<HttpRecorderException>().WithMessage("*multiple*");
         }
     }

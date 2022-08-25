@@ -46,7 +46,7 @@ namespace HttpRecorder.Tests
                 {
                     passthroughResponse = response;
                     var result = await response.Content.ReadFromJsonAsync<SampleModel>();
-                    result.Name.Should().Be(SampleModel.DefaultName);
+                    result!.Name.Should().Be(SampleModel.DefaultName);
                 }
                 else
                 {
@@ -71,7 +71,7 @@ namespace HttpRecorder.Tests
                 {
                     passthroughResponse = response;
                     var result = await response.Content.ReadFromJsonAsync<SampleModel>();
-                    result.Name.Should().Be(name);
+                    result!.Name.Should().Be(name);
                 }
                 else
                 {
@@ -97,7 +97,7 @@ namespace HttpRecorder.Tests
                 {
                     passthroughResponse = response;
                     var result = await response.Content.ReadFromJsonAsync<SampleModel>();
-                    result.Name.Should().Be(sampleModel.Name);
+                    result!.Name.Should().Be(sampleModel.Name);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace HttpRecorder.Tests
                 {
                     passthroughResponse = response;
                     var result = await response.Content.ReadFromJsonAsync<SampleModel>();
-                    result.Name.Should().Be(sampleModel.Name);
+                    result!.Name.Should().Be(sampleModel.Name);
                 }
                 else
                 {
@@ -165,7 +165,7 @@ namespace HttpRecorder.Tests
                         var response = responses[i];
                         response.Should().BeSuccessful();
                         var result = await response.Content.ReadFromJsonAsync<SampleModel>();
-                        result.Name.Should().Be($"{i}");
+                        result!.Name.Should().Be($"{i}");
                     }
                 }
                 else
@@ -185,21 +185,17 @@ namespace HttpRecorder.Tests
                 File.Delete(recordedFileName);
             }
 
-            var client = CreateHttpClient(
-                HttpRecorderMode.Auto,
-                nameof(ItShouldExecuteMultipleRequestsInSequenceWithRecorderModeAuto));
+            var client = CreateHttpClient(HttpRecorderMode.Auto);
             var response1 = await client.GetAsync($"{ApiController.JsonUri}?name=1");
             var response2 = await client.GetAsync($"{ApiController.JsonUri}?name=2");
             var result1 = await response1.Content.ReadFromJsonAsync<SampleModel>();
-            result1.Name.Should().Be("1");
+            result1!.Name.Should().Be("1");
 
             var result2 = await response2.Content.ReadFromJsonAsync<SampleModel>();
-            result2.Name.Should().Be("2");
+            result2!.Name.Should().Be("2");
 
             // We resolve to replay at this point.
-            client = CreateHttpClient(
-               HttpRecorderMode.Auto,
-               nameof(ItShouldExecuteMultipleRequestsInSequenceWithRecorderModeAuto));
+            client = CreateHttpClient(HttpRecorderMode.Auto);
             var response2_1 = await client.GetAsync($"{ApiController.JsonUri}?name=1");
             var response2_2 = await client.GetAsync($"{ApiController.JsonUri}?name=2");
 

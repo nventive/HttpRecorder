@@ -128,8 +128,8 @@ namespace HttpRecorder.Matchers
         public RulesMatcher ByContent()
             => By((request, message) =>
             {
-                var requestContent = request.Content?.ReadAsByteArrayAsync()?.ConfigureAwait(false).GetAwaiter().GetResult();
-                var messageContent = message.Response.RequestMessage.Content?.ReadAsByteArrayAsync()?.ConfigureAwait(false).GetAwaiter().GetResult();
+                var requestContent = request.Content?.ReadAsByteArrayAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+                var messageContent = message.Response.RequestMessage.Content?.ReadAsByteArrayAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 
                 if (requestContent is null)
                 {
@@ -149,8 +149,8 @@ namespace HttpRecorder.Matchers
                 }
 
                 return StructuralComparisons.StructuralComparer.Compare(
-                      request.Content?.ReadAsByteArrayAsync()?.Result,
-                      message.Response.RequestMessage.Content?.ReadAsByteArrayAsync()?.Result) == 0;
+                      request.Content?.ReadAsByteArrayAsync().Result,
+                      message.Response.RequestMessage.Content?.ReadAsByteArrayAsync().Result) == 0;
             });
 
         /// <summary>
@@ -165,10 +165,10 @@ namespace HttpRecorder.Matchers
             JsonSerializerOptions jsonSerializerOptions = null)
             => By((request, message) =>
             {
-                var requestContent = request.Content?.ReadAsStringAsync()?.Result;
+                var requestContent = request.Content?.ReadAsStringAsync().Result;
                 var requestJson = !string.IsNullOrEmpty(requestContent) ? JsonSerializer.Deserialize<T>(requestContent, jsonSerializerOptions) : default(T);
 
-                var interactionContent = message.Response.RequestMessage.Content?.ReadAsStringAsync()?.Result;
+                var interactionContent = message.Response.RequestMessage.Content?.ReadAsStringAsync().Result;
                 var interactionJson = !string.IsNullOrEmpty(interactionContent) ? JsonSerializer.Deserialize<T>(interactionContent, jsonSerializerOptions) : default(T);
 
                 if (equalityComparer == null)
