@@ -34,7 +34,7 @@ namespace HttpRecorder.Repositories.HAR
             StatusText = response.ReasonPhrase;
             if (response.Headers.Location != null)
             {
-                RedirectUrl = response.Headers.Location.ToString();
+                RedirectURL = response.Headers.Location.ToString();
             }
 
             foreach (var header in response.Headers)
@@ -73,7 +73,7 @@ namespace HttpRecorder.Repositories.HAR
         /// Gets or sets the redirection target URL from the Location response header.
         /// </summary>
         [SuppressMessage("Design", "CA1056:Uri properties should not be strings", Justification = "Conform to specification that can include empty strings.")]
-        public string RedirectUrl { get; set; } = string.Empty;
+        public string RedirectURL { get; set; } = string.Empty;
 
         /// <summary>
         /// Returns a <see cref="HttpResponseMessage"/>.
