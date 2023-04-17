@@ -72,7 +72,12 @@ namespace HttpRecorder.Repositories.HAR
         /// <summary>
         /// Gets or sets the redirection target URL from the Location response header.
         /// </summary>
+        /// <remarks>
+        /// This property must have the <c>URL</c> part in uppercase to observe the <a href="https://w3c.github.io/web-performance/specs/HAR/Overview.html">HAR specification</a>.
+        /// Renaming this property to <c>RedirectUrl</c> could break tools implementing the HAR specification.
+        /// </remarks>
         [SuppressMessage("Design", "CA1056:Uri properties should not be strings", Justification = "Conform to specification that can include empty strings.")]
+        [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Conform to specification requires URL to be uppercased.")]
         public string RedirectURL { get; set; } = string.Empty;
 
         /// <summary>
