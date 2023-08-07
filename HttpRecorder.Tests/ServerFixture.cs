@@ -30,7 +30,7 @@ namespace HttpRecorder.Tests
             get
             {
                 var serverAddressesFeature = ServerWebHost.ServerFeatures.Get<IServerAddressesFeature>();
-                return new Uri(serverAddressesFeature.Addresses.First());
+                return new Uri(serverAddressesFeature!.Addresses.First());
             }
         }
 

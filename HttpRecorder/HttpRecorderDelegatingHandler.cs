@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -190,17 +189,12 @@ namespace HttpRecorder
         /// <returns>The <see cref="HttpResponseMessage"/> returned as convenience.</returns>
         private async Task<HttpResponseMessage> PostProcessResponse(HttpResponseMessage response)
         {
-            if (response.Content != null)
+            // Trick to make sure a fake ContentLength is not artificially added by the HttpClient if none was provided by the server.
+            // Indeed, the ContentLength is _set_ in the _getter_, but explicitly setting a value opts out of this (undocumented) behaviour.
+            // See https://github.com/dotnet/runtime/blob/ebdb045532190ffc664bba9a0a1e3f2ce35cf23f/src/libraries/System.Net.Http/src/System/Net/Http/Headers/HttpContentHeaders.cs#L51
+            if (!response.Content.Headers.Contains("Content-Length"))
             {
-                var stream = await response.Content.ReadAsStreamAsync();
-                if (stream.CanSeek)
-                {
-                    // The HTTP Client is adding the content length header on HttpConnectionResponseContent even when the server does not have a header.
-                    response.Content.Headers.ContentLength = stream.Length;
-
-                    // We do reset the stream in case it needs to be re-read.
-                    stream.Seek(0, SeekOrigin.Begin);
-                }
+                response.Content.Headers.ContentLength = null;
             }
 
             return response;

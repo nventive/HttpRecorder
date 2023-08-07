@@ -51,7 +51,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     repository: repository,
                     anonymizer: anonymizer);
 
-            return httpClientBuilder.AddHttpMessageHandler((sp) => recorder);
+            return httpClientBuilder.AddHttpMessageHandler(_ => recorder);
 }
     }
 }

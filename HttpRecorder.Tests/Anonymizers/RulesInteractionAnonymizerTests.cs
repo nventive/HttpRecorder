@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -34,8 +33,8 @@ namespace HttpRecorder.Tests.Anonymizers
                 .AnonymizeRequestQueryStringParameter("key");
 
             var result = await anonymizer.Anonymize(interaction);
-            result.Messages[0].Response.RequestMessage.RequestUri.ToString().Should().Be("http://first/");
-            result.Messages[1].Response.RequestMessage.RequestUri.ToString().Should().Be($"https://second/?key={RulesInteractionAnonymizer.DefaultAnonymizerReplaceValue}&value=bar");
+            result.Messages[0].Response.RequestMessage!.RequestUri!.ToString().Should().Be("http://first/");
+            result.Messages[1].Response.RequestMessage!.RequestUri!.ToString().Should().Be($"https://second/?key={RulesInteractionAnonymizer.DefaultAnonymizerReplaceValue}&value=bar");
         }
 
         [Fact]
@@ -51,10 +50,10 @@ namespace HttpRecorder.Tests.Anonymizers
                 .AnonymizeRequestHeader("X-RequestHeader");
 
             var result = await anonymizer.Anonymize(interaction);
-            result.Messages[0].Response.RequestMessage.Headers.GetValues("X-RequestHeader").First().Should().Be(RulesInteractionAnonymizer.DefaultAnonymizerReplaceValue);
+            result.Messages[0].Response.RequestMessage!.Headers.GetValues("X-RequestHeader").First().Should().Be(RulesInteractionAnonymizer.DefaultAnonymizerReplaceValue);
         }
 
-        private Interaction BuildInteraction(params HttpRequestMessage[] requests)
+        private static Interaction BuildInteraction(params HttpRequestMessage[] requests)
         {
             return new Interaction(
                 "test",
