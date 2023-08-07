@@ -9,7 +9,7 @@ namespace HttpRecorder.Tests.Server
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(o => o.EnableEndpointRouting = false);
         }
 
         public void Configure(IApplicationBuilder app)

@@ -91,7 +91,7 @@ namespace HttpRecorder.Tests
             {
                 var client = services.BuildServiceProvider().GetRequiredService<IHttpClientFactory>().CreateClient("TheClient");
                 Func<Task> act = async () => await client.GetAsync(ApiController.JsonUri);
-                act.Should().Throw<HttpRecorderException>();
+                await act.Should().ThrowAsync<HttpRecorderException>();
             }
         }
 
