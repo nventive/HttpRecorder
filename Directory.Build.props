@@ -1,18 +1,16 @@
 <Project>
   <!-- Common properties for all projects -->
   <PropertyGroup>
-    <Authors>nventive</Authors>
-    <Description>.NET HttpClient integration tests made easy.</Description>
-    <Copyright>Copyright (c) 2020, nventive</Copyright>
+    <Authors>GiannisGeorgopoulos</Authors>
+    <Description>Fork of https://github.com/nventive/HttpRecorder</Description>
+    <Copyright>Copyright (c) 2024, GiannisGeorgopoulos</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Product>HttpRecorder</Product>
     <LangVersion>8.0</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <NoWarn>1701;1702;1998</NoWarn>
-    <PackageIconUrl>https://nventive-email-assets.s3.amazonaws.com/packages/nv-package-logo%400%2C25x.png</PackageIconUrl>
-    <PackageIcon>icon.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/nventive/HttpRecorder</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/GeorgopoulosGiannis/HttpRecorder</PackageProjectUrl>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
 
@@ -32,5 +30,4 @@
     <AdditionalFiles Include="..\stylecop.json" Link="Properties\stylecop.json" />
     <None Include="..\icon.png" Pack="true" PackagePath="\" Link="Properties\icon.png"/>
   </ItemGroup>
-
 </Project>

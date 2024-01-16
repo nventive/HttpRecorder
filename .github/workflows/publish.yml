@@ -1,0 +1,43 @@
+name: Push package to Nuget.org
+on:
+  workflow_dispatch: # Allow running the workflow manually from the GitHub UI
+  push:
+    branches:
+      - 'main'       # Run the workflow when pushing to the main branch
+  pull_request:
+    branches:
+      - '*'          # Run the workflow for all pull requests
+  release:
+    types:
+      - published    # Run the workflow when a new GitHub release is published
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+  NuGetDirectory: ${{ github.workspace}}/nuget
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  create_nuget:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+
+    - name: .NET Build
+      run: dotnet build --configuration Release -p:Version=${{ env.GitVersion.NuGetVersionV2 }} -p:FileVersion=${{ env.GitVersion.AssemblySemVer }} -p:InformationalVersion=${{ env.GitVersion.InformationalVersion }}
+      
+    - name: .NET Test
+      run: dotnet test --no-build --configuration Release --logger:trx
+
+    - name: .NET Pack
+      run: dotnet pack --no-build --configuration Release -p:Version=${{ env.GitVersion.NuGetVersionV2 }} --output ${{ github.workspace }}
+
+    - name: Push nuget
+      run: dotnet nuget push ./<project>/out/*.nupkg --api-key ${{ env.NUGET_ORG_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+                    
