@@ -5,7 +5,7 @@
     <Description>Fork of https://github.com/nventive/HttpRecorder</Description>
     <Copyright>Copyright (c) 2024, GiannisGeorgopoulos</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <Product>HttpRecorder</Product>
+    <Product>GiannisGeorgopoulos.HttpRecorder</Product>
     <LangVersion>8.0</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
