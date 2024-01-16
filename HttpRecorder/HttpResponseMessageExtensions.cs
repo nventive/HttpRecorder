@@ -31,7 +31,7 @@ namespace HttpRecorder
 
             foreach (var header in response.Headers)
             {
-                copiedResponse.Headers.Add(header.Key, header.Value);
+                copiedResponse.Headers.TryAddWithoutValidation(header.Key, header.Value);
             }
 
             if (response.Content == null)
@@ -42,7 +42,7 @@ namespace HttpRecorder
             copiedResponse.Content = new ByteArrayContent(response.Content.ReadAsByteArrayAsync().Result);
             foreach (var header in response.Content.Headers)
             {
-                copiedResponse.Content.Headers.Add(header.Key, header.Value);
+                copiedResponse.Content.Headers.TryAddWithoutValidation(header.Key, header.Value);
             }
 
             return copiedResponse;
