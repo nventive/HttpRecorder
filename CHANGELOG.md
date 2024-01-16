@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 
 ### Fixed
+    - [x] - `ObjectDisposedException` that can happen when matching the same response multiple times, and client disposes the response.
 
 ### Security
 
