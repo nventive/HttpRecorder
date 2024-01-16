@@ -24,10 +24,15 @@ jobs:
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0
       with:
-        versionSpec: '4.x'
+        versionSpec: '5.x'
 
     - name: Determine Version
       uses: gittools/actions/gitversion/execute@v0
+    
+    - name: Setup .NET Core 2.2 SDK for the Tests Project
+      uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '2.2.x'
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
