@@ -26,6 +26,13 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
+
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0
+
+    - name: Determine Version
+      uses: gittools/actions/gitversion/execute@v0
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
 
