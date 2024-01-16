@@ -7,9 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using HttpRecorder.Anonymizers;
+using HttpRecorder.Matchers;
 using HttpRecorder.Repositories;
 using HttpRecorder.Tests.Server;
 using Moq;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace HttpRecorder.Tests
@@ -326,13 +328,32 @@ namespace HttpRecorder.Tests
                 HttpRecorderMode.Record,
                 repository: repositoryMock.Object,
                 anonymizer: RulesInteractionAnonymizer.Default.AnonymizeRequestQueryStringParameter("key"));
-            Func<Task> act = async () => await client.GetAsync($"{ApiController.JsonUri}?key=foo");
-            act.Should().Throw<InvalidOperationException>(); // Because we don't act on the stream in the repository. That's fine.
-
+            await client.GetAsync($"{ApiController.JsonUri}?key=foo");
             repositoryMock.Verify(
                 x => x.StoreAsync(
                     It.Is<Interaction>(i => i.Messages[0].Response.RequestMessage.RequestUri.ToString().EndsWith($"{ApiController.JsonUri}?key={RulesInteractionAnonymizer.DefaultAnonymizerReplaceValue}", StringComparison.Ordinal)),
                     It.IsAny<CancellationToken>()));
+        }
+
+        [Fact]
+        public async Task ItShouldMatchMultipleWhenDisposingTheFirst()
+        {
+            var name = $"{nameof(ItShouldExecuteMultipleRequestsInSequenceWithRecorderModeAuto)}.har";
+            var client = CreateHttpClient(HttpRecorderMode.Auto, name, RulesMatcher.MatchMultiple);
+
+            var response = await client.GetAsync(ApiController.JsonUri);
+            using (var readStream = await response.Content.ReadAsStreamAsync())
+            {
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            response = await client.GetAsync(ApiController.JsonUri);
+            using (var readStream = await response.Content.ReadAsStreamAsync())
+            {
+            }
+
+            response.EnsureSuccessStatusCode();
         }
 
         private async Task ExecuteModeIterations(Func<HttpClient, HttpRecorderMode, Task> test, [CallerMemberName] string testName = "")
@@ -354,10 +375,11 @@ namespace HttpRecorder.Tests
         private HttpClient CreateHttpClient(
             HttpRecorderMode mode,
             [CallerMemberName] string testName = "",
+            RulesMatcher matcher = null,
             IInteractionRepository repository = null,
             IInteractionAnonymizer anonymizer = null)
             => new HttpClient(
-                new HttpRecorderDelegatingHandler(testName, mode: mode, repository: repository, anonymizer: anonymizer)
+                new HttpRecorderDelegatingHandler(testName, mode: mode, matcher: matcher, repository: repository, anonymizer: anonymizer)
                 {
                     InnerHandler = new HttpClientHandler(),
                 })

@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 
 namespace HttpRecorder
 {
@@ -8,6 +9,8 @@ namespace HttpRecorder
     /// </summary>
     public class InteractionMessage
     {
+        private HttpResponseMessage _response;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InteractionMessage"/> class.
         /// </summary>
@@ -17,14 +20,14 @@ namespace HttpRecorder
             HttpResponseMessage response,
             InteractionMessageTimings timings)
         {
-            Response = response;
+            _response = response;
             Timings = timings;
         }
 
         /// <summary>
         /// Gets the <see cref="HttpResponseMessage"/>.
         /// </summary>
-        public HttpResponseMessage Response { get; }
+        public HttpResponseMessage Response { get => _response.Clone(); }
 
         /// <summary>
         /// Gets the <see cref="InteractionMessageTimings"/>.
