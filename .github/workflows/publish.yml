@@ -36,6 +36,8 @@ jobs:
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
 
     - name: .NET Build
       run: dotnet build --configuration Release -p:Version=${{ env.GitVersion_NuGetVersionV2 }} -p:FileVersion=${{ env.GitVersion_AssemblySemVer }} -p:InformationalVersion=${{ env.GitVersion_InformationalVersion }}
