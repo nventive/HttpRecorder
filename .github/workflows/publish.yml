@@ -45,5 +45,5 @@ jobs:
       run: dotnet pack --no-build --configuration Release -p:Version=${{ env.GitVersion_NuGetVersionV2 }} --output ${{ github.workspace }}
 
     - name: Push nuget
-      run: dotnet nuget push ./<project>/out/*.nupkg --api-key ${{ secrets.NUGET_ORG_API_KEY }}
+      run: dotnet nuget push /HttpRecorder/*.nupkg --api-key ${{ secrets.NUGET_ORG_API_KEY }}
                     
