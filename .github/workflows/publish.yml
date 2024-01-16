@@ -23,11 +23,11 @@ jobs:
 
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0
+      with:
+        versionSpec: '5.x'
 
     - name: Determine Version
       uses: gittools/actions/gitversion/execute@v0
-      with:
-        versionSpec: '5.x'
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
